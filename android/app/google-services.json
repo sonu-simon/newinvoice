@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "199078515418",
+    "firebase_url": "https://invoiceapp-1080b.firebaseio.com",
+    "project_id": "invoiceapp-1080b",
+    "storage_bucket": "invoiceapp-1080b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199078515418:android:2a24179dca66bbf8648be3",
+        "android_client_info": {
+          "package_name": "com.example.invoiceapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "199078515418-ht0ob8sj241sjuib2d3el1p2fs7l9po8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkecvK6Y_NrsYDRj9vqomX5rTVdu5ERBg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "199078515418-ht0ob8sj241sjuib2d3el1p2fs7l9po8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199078515418:android:82d9a234c552bb61648be3",
+        "android_client_info": {
+          "package_name": "com.example.newinvoice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "199078515418-ht0ob8sj241sjuib2d3el1p2fs7l9po8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkecvK6Y_NrsYDRj9vqomX5rTVdu5ERBg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "199078515418-ht0ob8sj241sjuib2d3el1p2fs7l9po8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -15,7 +15,7 @@ var focusNode = FocusNode();
 class _UpdateOrderState extends State<UpdateOrder> {
   final _formKey = GlobalKey<FormState>();
   int _radioOne;
-  String avatarColor ;
+  String avatarColor;
   String orderName;
   String orderQty;
   String orderID;
@@ -71,15 +71,9 @@ class _UpdateOrderState extends State<UpdateOrder> {
 
   @override
   Widget build(BuildContext context) {
-    orderName = widget.existOrder.name;
-    orderQty = widget.existOrder.orderQty;
+
     orderID = widget.existOrder.orderID;
     orderDateTimeData = widget.existOrder.dateTimeData;
-
-    final orderNameController =
-        TextEditingController(text: widget.existOrder.name);
-    final orderQtyController =
-        TextEditingController(text: widget.existOrder.orderQty);
 
     return Wrap(children: <Widget>[
       Form(
@@ -92,7 +86,8 @@ class _UpdateOrderState extends State<UpdateOrder> {
                     padding: EdgeInsets.all(20.0),
                     child: TextFormField(
                       focusNode: focusNode,
-                      controller: orderNameController,
+                      initialValue: widget.existOrder.name,
+                      onChanged: (val) => orderName = val,
                       decoration: new InputDecoration(
                         labelText: "Name",
                         fillColor: Colors.white,
@@ -109,9 +104,6 @@ class _UpdateOrderState extends State<UpdateOrder> {
                         }
                       },
                       keyboardType: TextInputType.emailAddress,
-                      style: new TextStyle(
-                        fontFamily: "Poppins",
-                      ),
                     ),
                   ),
                 ],
@@ -121,8 +113,8 @@ class _UpdateOrderState extends State<UpdateOrder> {
                   Container(
                     padding: EdgeInsets.all(20.0),
                     child: TextFormField(
-                      focusNode: focusNode,
-                      controller: orderQtyController,
+                      initialValue: widget.existOrder.orderQty,
+                      onChanged: (val) => orderQty = val,
                       decoration: new InputDecoration(
                         labelText: "Quantity",
                         fillColor: Colors.white,
@@ -139,9 +131,6 @@ class _UpdateOrderState extends State<UpdateOrder> {
                         }
                       },
                       keyboardType: TextInputType.emailAddress,
-                      style: new TextStyle(
-                        fontFamily: "Poppins",
-                      ),
                     ),
                   ),
                 ],
@@ -204,23 +193,18 @@ class _UpdateOrderState extends State<UpdateOrder> {
               ]),
               SizedBox(height: 15.0),
               FlatButton(
-                  child: Text('Add to database'),
+                  child: Text('Save to database'),
                   shape: Border.all(),
                   onPressed: () {
                     final form = _formKey.currentState;
                     if (form.validate()) {
-                      orderName = orderNameController.text;
-                      orderQty = orderQtyController.text;
-
+                      orderName ??= widget.existOrder.name;
+                      orderQty ??= widget.existOrder.orderQty;
                       DatabaseService(orderID: orderID).updateOrder(orderID,
                           orderName, orderDateTimeData, avatarColor, orderQty);
                       FocusScope.of(context).requestFocus(focusNode);
-                      print(avatarColor);
-                      print(orderName);
-                      orderNameController.clear();
-                      orderQtyController.clear();
                       _radioOne = 0;
-                      //Navigator.pop(context);
+                      Navigator.of(context).pop();
                     }
                   })
             ],

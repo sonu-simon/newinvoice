@@ -5,6 +5,8 @@ import 'package:newinvoice/screens/updateorder.dart';
 import 'package:newinvoice/services/database.dart';
 import 'package:provider/provider.dart';
 
+import '../services/database.dart';
+
 class ListOrders extends StatefulWidget {
   @override
   _ListOrdersState createState() => _ListOrdersState();
@@ -41,19 +43,19 @@ class _ListOrdersState extends State<ListOrders> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ScreenWithData(
-                                order: orderssnap[index],
+                                orderIndex: index,
                               )));
                 },
                 title: Text(orderssnap[index].name),
                 subtitle: Text(orderssnap[index].dateTimeData),
                 leading: CircleAvatar(
-                  backgroundColor: Color(int.parse(orderssnap[index].avatarColor))
-                ),
+                    backgroundColor:
+                        Color(int.parse(orderssnap[index].avatarColor))),
                 trailing: IconButton(
                   icon: Icon(Icons.remove),
                   onPressed: () {
                     orderssnap.removeAt(index);
-                    
+
                     setState(() {
                       statechange = !statechange;
                     });
@@ -86,47 +88,54 @@ class _ListOrdersState extends State<ListOrders> {
   }
 }
 
-class ScreenWithData extends StatelessWidget {
-  final Order order;
-  ScreenWithData({this.order});
+class ScreenWithData extends StatefulWidget {
+  final int orderIndex;
+  ScreenWithData({this.orderIndex});
+
+
+  @override
+  _ScreenWithDataState createState() => _ScreenWithDataState();
+}
+
+class _ScreenWithDataState extends State<ScreenWithData> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-      child: Wrap(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(child: Text(order.orderID)),
-          ),
-          ListTile(
-            title: Text(order.name),
-            subtitle: Text(order.dateTimeData),
-            leading: CircleAvatar(
-              backgroundColor: Color(int.parse(order.avatarColor)),
+    final orderssnap = Provider.of<List<Order>>(context) ?? [];
+      int index = widget.orderIndex;
+
+    return StreamProvider<List<Order>>.value(
+      value: DatabaseService().orderssnap,
+      child: Scaffold(
+          body: Center(
+        child: Wrap(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(child: Text(orderssnap[index].orderID)),
             ),
-            trailing: IconButton(icon: Icon(Icons.edit), onPressed: (){
-               showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        content: UpdateOrder(existOrder: order,),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text('Done'),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
-                      );
-                    });
-              })
-            
-          ),
-        ],
-      ),
-    ));
+            ListTile(
+                title: Text(orderssnap[index].name),
+                subtitle: Text(orderssnap[index].dateTimeData),
+                leading: CircleAvatar(
+                  backgroundColor: Color(int.parse(orderssnap[index].avatarColor)),
+                ),
+                trailing: IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              content: UpdateOrder(
+                                existOrder: orderssnap[index],
+                              ),
+                            );
+                          });
+                    })),
+          ],
+        ),
+      )),
+    );
   }
 }

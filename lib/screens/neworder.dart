@@ -6,9 +6,6 @@ class NewOrder extends StatefulWidget {
   _NewOrderState createState() => _NewOrderState();
 }
 
-final orderNameController = TextEditingController();
-final orderQtyController = TextEditingController();
-
 var focusNode = FocusNode();
 
 class _NewOrderState extends State<NewOrder> {
@@ -50,8 +47,65 @@ class _NewOrderState extends State<NewOrder> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              TextOrderName(),
-              TextOrderColor(),
+              Column(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(20.0),
+                    child: TextFormField(
+                      focusNode: focusNode,
+                      onChanged: (val) => orderName = val,
+                      decoration: new InputDecoration(
+                        labelText: "Name",
+                        fillColor: Colors.white,
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(12.0),
+                          borderSide: new BorderSide(),
+                        ),
+                      ),
+                      validator: (val) {
+                        if (val.length == 0) {
+                          return "Name cannot be empty";
+                        } else {
+                          return null;
+                        }
+                      },
+                      keyboardType: TextInputType.emailAddress,
+                      style: new TextStyle(
+                        fontFamily: "Poppins",
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(20.0),
+                    child: TextFormField(
+                      onChanged: (val) => orderQty = val,
+                      decoration: new InputDecoration(
+                        labelText: "Quantity",
+                        fillColor: Colors.white,
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(12.0),
+                          borderSide: new BorderSide(),
+                        ),
+                      ),
+                      validator: (val) {
+                        if (val.length == 0) {
+                          return "Qty cannot be empty";
+                        } else {
+                          return null;
+                        }
+                      },
+                      keyboardType: TextInputType.emailAddress,
+                      style: new TextStyle(
+                        fontFamily: "Poppins",
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               Column(children: <Widget>[
                 Text('Select an avatar color:'),
                 Row(
@@ -63,10 +117,11 @@ class _NewOrderState extends State<NewOrder> {
                         radius: 10.0,
                         backgroundColor: Colors.red[200],
                         child: Radio(
-                            value: 0,
-                            groupValue: _radioOne,
-                            activeColor: Colors.red[700],
-                            onChanged: _handleRadioChangeOne),
+                          value: 0,
+                          groupValue: _radioOne,
+                          activeColor: Colors.red[700],
+                          onChanged: _handleRadioChangeOne,
+                        ),
                       ),
                     ),
                     Padding(
@@ -75,10 +130,11 @@ class _NewOrderState extends State<NewOrder> {
                         radius: 10.0,
                         backgroundColor: Colors.blue[200],
                         child: Radio(
-                            value: 1,
-                            groupValue: _radioOne,
-                            activeColor: Colors.blue[700],
-                            onChanged: _handleRadioChangeOne),
+                          value: 1,
+                          groupValue: _radioOne,
+                          activeColor: Colors.blue[700],
+                          onChanged: _handleRadioChangeOne,
+                        ),
                       ),
                     ),
                     Padding(
@@ -87,10 +143,11 @@ class _NewOrderState extends State<NewOrder> {
                         radius: 10.0,
                         backgroundColor: Colors.green[200],
                         child: Radio(
-                            value: 2,
-                            groupValue: _radioOne,
-                            activeColor: Colors.green[700],
-                            onChanged: _handleRadioChangeOne),
+                          value: 2,
+                          groupValue: _radioOne,
+                          activeColor: Colors.green[700],
+                          onChanged: _handleRadioChangeOne,
+                        ),
                       ),
                     ),
                     Padding(
@@ -99,10 +156,11 @@ class _NewOrderState extends State<NewOrder> {
                         radius: 10.0,
                         backgroundColor: Colors.yellow[200],
                         child: Radio(
-                            value: 3,
-                            groupValue: _radioOne,
-                            activeColor: Colors.yellow[700],
-                            onChanged: _handleRadioChangeOne),
+                          value: 3,
+                          groupValue: _radioOne,
+                          activeColor: Colors.yellow[700],
+                          onChanged: _handleRadioChangeOne,
+                        ),
                       ),
                     ),
                   ],
@@ -116,102 +174,19 @@ class _NewOrderState extends State<NewOrder> {
                     final form = _formKey.currentState;
                     if (form.validate()) {
                       //avatarColor.isEmpty ? avatarColor = '0xFFE44236' : avatarColor = avatarColor;
-                      orderName = orderNameController.text;
-                      orderQty = orderQtyController.text;
+
                       orderID = 'order' + DateTime.now().toString();
                       orderDateTimeData = DateTime.now().toString();
                       DatabaseService(orderID: orderID).updateOrder(orderID,
-                          orderName, orderDateTimeData, avatarColor,orderQty);
+                          orderName, orderDateTimeData, avatarColor, orderQty);
                       FocusScope.of(context).requestFocus(focusNode);
-                      orderNameController.clear();
-                      orderQtyController.clear();
                       _radioOne = 0;
+                      _formKey.currentState.reset();
                       //Navigator.pop(context);
                     }
                   })
             ],
           )),
     ]);
-  }
-}
-
-class TextOrderName extends StatefulWidget {
-  @override
-  _TextOrderName createState() => _TextOrderName();
-}
-
-class _TextOrderName extends State<TextOrderName> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.all(20.0),
-          child: TextFormField(
-            focusNode: focusNode,
-            controller: orderNameController,
-            decoration: new InputDecoration(
-              labelText: "Name",
-              fillColor: Colors.white,
-              border: new OutlineInputBorder(
-                borderRadius: new BorderRadius.circular(12.0),
-                borderSide: new BorderSide(),
-              ),
-            ),
-            validator: (val) {
-              if (val.length == 0) {
-                return "Name cannot be empty";
-              } else {
-                return null;
-              }
-            },
-            keyboardType: TextInputType.emailAddress,
-            style: new TextStyle(
-              fontFamily: "Poppins",
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class TextOrderColor extends StatefulWidget {
-  @override
-  _TextOrderColorState createState() => _TextOrderColorState();
-}
-
-class _TextOrderColorState extends State<TextOrderColor> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.all(20.0),
-          child: TextFormField(
-            controller: orderQtyController,
-            decoration: new InputDecoration(
-              labelText: "Quantity",
-              fillColor: Colors.white,
-              border: new OutlineInputBorder(
-                borderRadius: new BorderRadius.circular(12.0),
-                borderSide: new BorderSide(),
-              ),
-            ),
-            validator: (val) {
-              if (val.length == 0) {
-                return "Qty cannot be empty";
-              } else {
-                return null;
-              }
-            },
-            keyboardType: TextInputType.emailAddress,
-            style: new TextStyle(
-              fontFamily: "Poppins",
-            ),
-          ),
-        ),
-      ],
-    );
   }
 }

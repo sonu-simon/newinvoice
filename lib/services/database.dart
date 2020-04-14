@@ -20,6 +20,10 @@ class DatabaseService {
     });
   }
 
+  Future deleteOrder(String orderID) async {
+    return await orderCollection.document(orderID).delete();
+  }
+
   List<Order> _orderListfromSnapshot(QuerySnapshot snapshot){
     return snapshot.documents.map((doc) {
       return Order(doc.data['orderID'],doc.data['name'],doc.data['dateTimeData'], doc.data['avatarColor'], doc.data['orderQty']);

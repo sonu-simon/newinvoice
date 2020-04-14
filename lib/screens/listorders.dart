@@ -52,13 +52,9 @@ class _ListOrdersState extends State<ListOrders> {
                     backgroundColor:
                         Color(int.parse(orderssnap[index].avatarColor))),
                 trailing: IconButton(
-                  icon: Icon(Icons.remove),
+                  icon: Icon(Icons.delete),
                   onPressed: () {
-                    orderssnap.removeAt(index);
-
-                    setState(() {
-                      statechange = !statechange;
-                    });
+                    DatabaseService(orderID: orderssnap[index].orderID).deleteOrder(orderssnap[index].orderID);
                   },
                 ),
               );

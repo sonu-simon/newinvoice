@@ -9,7 +9,7 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   final List tabs = [ListOrders(), SortByAvatarColor()];
-  int _currentIndex;
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {

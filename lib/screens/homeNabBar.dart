@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:newinvoice/screens/listorders.dart';
-import 'package:newinvoice/screens/neworder.dart';
+import 'package:newinvoice/screens/sort_color.dart';
 
 class BottomNavBar extends StatefulWidget {
   @override
@@ -8,11 +8,8 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
-  final List tabs = [
-    ListOrders(),
-    NewOrder()
-  ];
-  int _currentIndex = 0;
+  final List tabs = [ListOrders(), SortByAvatarColor()];
+  int _currentIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +29,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
               title: Text('List'),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              title: Text('Profile'),
-            )
+              icon: Icon(Icons.sort),
+              title: Text('Sort'),
+            ),
           ]),
     );
   }

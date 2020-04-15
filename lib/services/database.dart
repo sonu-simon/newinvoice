@@ -9,20 +9,29 @@ class DatabaseService {
   final CollectionReference orderCollection =
       Firestore.instance.collection('orders');
 
-  Future updateOrder(String orderID, String name, String dateTimeData,
-      String avatarColor, String orderQty) async {
+  Future updateOrder(String orderID, String name, DateTime dateTimeData,
+      String avatarColor, int orderQty) async {
+    print(dateTimeData.toString());
+    String dateTimeString = (dateTimeData).toString();
+
     return await orderCollection.document(orderID).setData({
       'orderID': orderID,
       'name': name,
-      'dateTimeData': dateTimeData,
+      'dateTimeData': dateTimeString,
       'avatarColor': avatarColor,
       'orderQty': orderQty,
     });
   }
 
-  List<Order> _orderListfromSnapshot(QuerySnapshot snapshot){
+  Future deleteOrder(String orderID) async {
+    return await orderCollection.document(orderID).delete();
+  }
+
+  List<Order> _orderListfromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
-      return Order(doc.data['orderID'],doc.data['name'],doc.data['dateTimeData'], doc.data['avatarColor'], doc.data['orderQty']);
+      DateTime dateTimeData = DateTime.parse(doc.data['dateTimeData']);
+      return Order(doc.data['orderID'], doc.data['name'], dateTimeData,
+          doc.data['avatarColor'], doc.data['orderQty']);
     }).toList();
   }
 

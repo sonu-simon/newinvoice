@@ -4,6 +4,7 @@ import 'package:newinvoice/screens/neworder.dart';
 import 'package:newinvoice/screens/updateorder.dart';
 import 'package:newinvoice/services/database.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 import '../services/database.dart';
 
@@ -47,7 +48,7 @@ class _ListOrdersState extends State<ListOrders> {
                               )));
                 },
                 title: Text(orderssnap[index].name),
-                subtitle: Text(orderssnap[index].dateTimeData),
+                subtitle: Text((DateFormat.yMMMd().format(orderssnap[index].dateTimeData)).toString()),
                 leading: CircleAvatar(
                     backgroundColor:
                         Color(int.parse(orderssnap[index].avatarColor))),
@@ -112,7 +113,7 @@ class _ScreenWithDataState extends State<ScreenWithData> {
             ),
             ListTile(
                 title: Text(orderssnap[index].name),
-                subtitle: Text(orderssnap[index].dateTimeData),
+                subtitle: Text((DateFormat.yMMMd().format(orderssnap[index].dateTimeData)).toString()),
                 leading: CircleAvatar(
                   backgroundColor: Color(int.parse(orderssnap[index].avatarColor)),
                 ),

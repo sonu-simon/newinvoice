@@ -1,9 +1,9 @@
 class Order{
   String orderID;
   String name;
-  String dateTimeData;
+  DateTime dateTimeData;
   String avatarColor;
-  String orderQty;
+  int orderQty;
 
   Order(this.orderID,this.name, this.dateTimeData, this.avatarColor, this.orderQty);
 

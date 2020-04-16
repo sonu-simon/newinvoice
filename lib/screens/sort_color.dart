@@ -24,21 +24,27 @@ class _SortByAvatarColorState extends State<SortByAvatarColor> {
           _radioOne = 0;
           _radioSelectedColor = colorOne;
           break;
+
         case 1:
           _radioOne = 1;
           _radioSelectedColor = colorTwo;
-
           break;
+
         case 2:
           _radioOne = 2;
           _radioSelectedColor = colorThree;
-
           break;
+
         case 3:
           _radioOne = 3;
           _radioSelectedColor = colorFour;
-
           break;
+
+        default:
+          if(value > 3)
+            _handleRadioChangeOne(3);
+          else if(value < 0)
+            _handleRadioChangeOne(0);
       }
     });
   }
@@ -71,29 +77,40 @@ class _SortByAvatarColorState extends State<SortByAvatarColor> {
                   radioHandleChange: _handleRadioChangeOne,
                 ),
               ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.72,
-                child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ScreenWithData(
-                                      orderIndex: index,
-                                    )));
-                      },
-                      title: Text(selectedColorOrders[index].name),
-                      subtitle: Text((DateFormat.yMMMd()
-                              .format(selectedColorOrders[index].dateTimeData))
-                          .toString()),
-                      leading: CircleAvatar(
-                          backgroundColor: Color(int.parse(
-                              selectedColorOrders[index].avatarColor))),
-                    );
-                  },
-                  itemCount: selectedColorOrders.length,
+              GestureDetector(
+                onHorizontalDragEnd: (DragEndDetails endDetails) {
+                  if (endDetails.primaryVelocity < -200) {
+                    print('swipe left');
+                    _handleRadioChangeOne(++_radioOne);
+                  } else if (endDetails.primaryVelocity > 200) {
+                    print('swipe right');
+                    _handleRadioChangeOne(--_radioOne);
+                  }
+                },
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.72,
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ScreenWithData(
+                                        orderIndex: index,
+                                      )));
+                        },
+                        title: Text(selectedColorOrders[index].name),
+                        subtitle: Text((DateFormat.yMMMd().format(
+                                selectedColorOrders[index].dateTimeData))
+                            .toString()),
+                        leading: CircleAvatar(
+                            backgroundColor: Color(int.parse(
+                                selectedColorOrders[index].avatarColor))),
+                      );
+                    },
+                    itemCount: selectedColorOrders.length,
+                  ),
                 ),
               ),
             ],

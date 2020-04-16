@@ -44,7 +44,7 @@ class _ListOrdersState extends State<ListOrders> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ScreenWithData(
-                                orderIndex: index,
+                                order: orderssnap[index],
                               )));
                 },
                 title: Text(orderssnap[index].name),
@@ -86,20 +86,23 @@ class _ListOrdersState extends State<ListOrders> {
 }
 
 class ScreenWithData extends StatefulWidget {
-  final int orderIndex;
-  ScreenWithData({this.orderIndex});
-
+  final Order order;
+  ScreenWithData({this.order});
 
   @override
   _ScreenWithDataState createState() => _ScreenWithDataState();
 }
 
 class _ScreenWithDataState extends State<ScreenWithData> {
-
   @override
   Widget build(BuildContext context) {
+    int index;
     final orderssnap = Provider.of<List<Order>>(context) ?? [];
-      int index = widget.orderIndex;
+    for(var tempOrder in orderssnap){
+      if(tempOrder.orderID == widget.order.orderID){
+        index = orderssnap.indexOf(tempOrder);
+      }
+    }
 
     return StreamProvider<List<Order>>.value(
       value: DatabaseService().orderssnap,

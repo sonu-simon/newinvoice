@@ -98,7 +98,7 @@ class _SortByAvatarColorState extends State<SortByAvatarColor> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ScreenWithData(
-                                      orderIndex: index,
+                                      order: selectedColorOrders[index],
                                     )));
                       },
                       title: Text(selectedColorOrders[index].name),

@@ -41,10 +41,9 @@ class _SortByAvatarColorState extends State<SortByAvatarColor> {
           break;
 
         default:
-          if(value > 3)
+          if (value > 3)
             _handleRadioChangeOne(3);
-          else if(value < 0)
-            _handleRadioChangeOne(0);
+          else if (value < 0) _handleRadioChangeOne(0);
       }
     });
   }
@@ -54,67 +53,85 @@ class _SortByAvatarColorState extends State<SortByAvatarColor> {
     _radioSelectedColor ??= colorOne;
     final orderssnap = Provider.of<List<Order>>(context) ?? [];
     final selectedColorOrders = [];
+    int sumOfQty = 0;
     for (Order selectedColorOrder in orderssnap) {
       if (selectedColorOrder.avatarColor == _radioSelectedColor) {
         selectedColorOrders.add(selectedColorOrder);
+        sumOfQty += selectedColorOrder.orderQty;
       }
     }
 
     return StreamProvider<List<Order>>.value(
-        value: DatabaseService().orderssnap,
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('Sort List'),
-          ),
-          body: Column(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.all(10),
-                margin: EdgeInsets.only(left: 10, top: 10, right: 10),
-                height: MediaQuery.of(context).size.height * 0.10,
-                child: AvatarColorRadio(
-                  radioGroupVal: _radioOne,
-                  radioHandleChange: _handleRadioChangeOne,
+      value: DatabaseService().orderssnap,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Sort List'),
+        ),
+        body: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(10),
+              margin: EdgeInsets.only(left: 10, top: 10, right: 10),
+              height: MediaQuery.of(context).size.height * 0.10,
+              child: AvatarColorRadio(
+                radioGroupVal: _radioOne,
+                radioHandleChange: _handleRadioChangeOne,
+              ),
+            ),
+            GestureDetector(
+              onHorizontalDragEnd: (DragEndDetails endDetails) {
+                if (endDetails.primaryVelocity < -200) {
+                  print('swipe left');
+                  _handleRadioChangeOne(++_radioOne);
+                } else if (endDetails.primaryVelocity > 200) {
+                  print('swipe right');
+                  _handleRadioChangeOne(--_radioOne);
+                }
+              },
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.72,
+                child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ScreenWithData(
+                                      orderIndex: index,
+                                    )));
+                      },
+                      title: Text(selectedColorOrders[index].name),
+                      subtitle: Text((DateFormat.yMMMd()
+                              .format(selectedColorOrders[index].dateTimeData))
+                          .toString()),
+                      leading: CircleAvatar(
+                          backgroundColor: Color(int.parse(
+                              selectedColorOrders[index].avatarColor))),
+                    );
+                  },
+                  itemCount: selectedColorOrders.length,
                 ),
               ),
-              GestureDetector(
-                onHorizontalDragEnd: (DragEndDetails endDetails) {
-                  if (endDetails.primaryVelocity < -200) {
-                    print('swipe left');
-                    _handleRadioChangeOne(++_radioOne);
-                  } else if (endDetails.primaryVelocity > 200) {
-                    print('swipe right');
-                    _handleRadioChangeOne(--_radioOne);
-                  }
-                },
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.72,
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ScreenWithData(
-                                        orderIndex: index,
-                                      )));
-                        },
-                        title: Text(selectedColorOrders[index].name),
-                        subtitle: Text((DateFormat.yMMMd().format(
-                                selectedColorOrders[index].dateTimeData))
-                            .toString()),
-                        leading: CircleAvatar(
-                            backgroundColor: Color(int.parse(
-                                selectedColorOrders[index].avatarColor))),
-                      );
-                    },
-                    itemCount: selectedColorOrders.length,
-                  ),
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: Container(
+            width: 40,
+            height: 40,
+            child: Center(
+              child: Text(
+                sumOfQty.toString(),
+                style: TextStyle(
+                  fontSize: 18,
                 ),
               ),
-            ],
+            ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
